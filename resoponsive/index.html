@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Image Map</title>
+    <style>
+        .image-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <img src="view.jpg" usemap="#image-map" alt="Responsive Image" id="responsive-image">
+        <map name="image-map">
+            <area target="_blank" alt="b1" title="b1" href="https://www.google.com" coords="1662,1560,1849,1518,1867,1616,1676,1658" shape="poly" id="area-b1">
+            <area target="_blank" alt="b2" title="b2" href="https://www.google.com" coords="1699,1871,1877,1671,1989,1755,1816,1960" shape="poly" id="area-b2">
+            <area target="_blank" alt="b3" title="b3" href="https://www.google.com" coords="2035,1707,2212,1679,2236,1870,2049,1893" shape="poly" id="area-b3">
+            <area target="_blank" alt="b4" title="b4" href="https://www.google.com" coords="2343,1548,2567,1599,2520,1776,2292,1721" shape="poly" id="area-b4">
+            <area target="_blank" alt="b5" title="b5" href="https://www.google.com" coords="2651,1627,2879,1674,2837,1851,2604,1795" shape="poly" id="area-b5">
+            <area target="_blank" alt="b6" title="b6" href="https://www.google.com" coords="2497,1438,2730,1494,2702,1605,2469,1545" shape="poly" id="area-b6">
+            <area target="_blank" alt="b7" title="b7" href="https://www.google.com" coords="2184,567,2320,647,2259,707,2124,628" shape="poly" id="area-b7">
+            <area target="_blank" alt="b8" title="b8" href="https://www.google.com" coords="2418,780,2488,696,2656,804,2586,887" shape="poly" id="area-b8">
+            <area target="_blank" alt="b9" title="b9" href="https://www.google.com" coords="2562,692,2698,785,2800,668,2660,580" shape="poly" id="area-b9">
+            <area target="_blank" alt="b10" title="b10" href="https://www.google.com" coords="2702,901,2842,990,2805,1041,2660,948" shape="poly" id="area-b10">
+            <area target="_blank" alt="b11" title="b11" href="https://www.google.com" coords="3005,1139,3113,1069,3211,1186,3103,1256" shape="poly" id="area-b11">
+            <area target="_blank" alt="b12" title="b12" href="https://www.google.com" coords="3094,1487,3159,1501,3136,1623,3066,1613" shape="poly" id="area-b12">
+            <area target="_blank" alt="b13" title="b13" href="https://www.google.com" coords="3598,1753,3686,1818,3434,2131,3346,2066" shape="poly" id="area-b13">
+            <area target="_blank" alt="b14" title="b14" href="https://www.google.com" coords="3248,2135,3346,2196,3131,2583,3033,2527" shape="poly" id="area-b14">
+        </map>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const img = document.getElementById('responsive-image');
+            const areas = document.querySelectorAll('map area');
+
+            const imgOriginalWidth = 5280;
+            const imgOriginalHeight = 2970;
+
+            function updateMapAreas() {
+                const imgWidth = img.offsetWidth;
+                const imgHeight = img.offsetHeight;
+                
+                const originalCoords = {
+                    'area-b1': [1662, 1560, 1849, 1518, 1867, 1616, 1676, 1658],
+                    'area-b2': [1699, 1871, 1877, 1671, 1989, 1755, 1816, 1960],
+                    'area-b3': [2035, 1707, 2212, 1679, 2236, 1870, 2049, 1893],
+                    'area-b4': [2343, 1548, 2567, 1599, 2520, 1776, 2292, 1721],
+                    'area-b5': [2651, 1627, 2879, 1674, 2837, 1851, 2604, 1795],
+                    'area-b6': [2497, 1438, 2730, 1494, 2702, 1605, 2469, 1545],
+                    'area-b7': [2184, 567, 2320, 647, 2259, 707, 2124, 628],
+                    'area-b8': [2418, 780, 2488, 696, 2656, 804, 2586, 887],
+                    'area-b9': [2562, 692, 2698, 785, 2800, 668, 2660, 580],
+                    'area-b10': [2702, 901, 2842, 990, 2805, 1041, 2660, 948],
+                    'area-b11': [3005, 1139, 3113, 1069, 3211, 1186, 3103, 1256],
+                    'area-b12': [3094, 1487, 3159, 1501, 3136, 1623, 3066, 1613],
+                    'area-b13': [3598, 1753, 3686, 1818, 3434, 2131, 3346, 2066],
+                    'area-b14': [3248, 2135, 3346, 2196, 3131, 2583, 3033, 2527]
+                };
+
+                Object.keys(originalCoords).forEach(id => {
+                    const coords = originalCoords[id];
+                    const coordsString = coords.map((coord, index) => 
+                        Math.round((index % 2 === 0 ? imgWidth : imgHeight) * (coord / (index % 2 === 0 ? imgOriginalWidth : imgOriginalHeight)))
+                    ).join(',');
+
+                    document.getElementById(id).setAttribute('coords', coordsString);
+                });
+            }
+
+            // Initial update
+            updateMapAreas();
+            
+            // Update on image load and window resize
+            img.addEventListener('load', updateMapAreas);
+            window.addEventListener('resize', updateMapAreas);
+        });
+    </script>
+</body>
+</html>
